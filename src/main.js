@@ -1,8 +1,29 @@
 import Vue from 'vue'
 import App from './App.vue'
+import { BootstrapVue } from 'bootstrap-vue'
+
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import router from './router'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import i18n from './i18n'
+import VueConfirmDialog from 'vue-confirm-dialog'
+import Vuelidate from 'vuelidate'
+import store from './store'
 
 Vue.config.productionTip = false
+Vue.use(BootstrapVue)
+axios.defaults.baseURL = 'htt://127.0.0.1:8022/';
+Vue.use(VueAxios, axios)
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
+Vue.use(Vuelidate)
 
 new Vue({
-  render: h => h(App),
+  router,
+  i18n,
+  store,
+  render: h => h(App)
 }).$mount('#app')

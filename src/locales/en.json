@@ -1,0 +1,10 @@
+{
+  "name": "name",
+  "surname": "surname",
+  "company": "company",
+  "number": "number",
+  "email": "email",
+  "password": "password",
+  "login": "login",
+  "register": "register"
+}
