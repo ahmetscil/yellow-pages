@@ -42,13 +42,14 @@ export default {
       if (this.$v.$invalid) {
         alert('field error')
       } else {
-        const User = new FormData();
-        User.append("name", this.form.name);
-        User.append("email", this.form.email);
-        User.append("password", this.form.password);
+        const User = {
+          username: this.form.name,
+          email: this.form.email,
+          password: this.form.password
+        }
         try {
             await this.Register(User);
-            this.$router.push("/Login");
+            this.$router.push({ name: 'Home' });
             this.showError = false
         } catch (error) {
           this.showError = true

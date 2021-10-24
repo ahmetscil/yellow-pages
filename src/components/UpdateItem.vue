@@ -12,7 +12,7 @@
         </h1>
       </b-col>
       <b-col cols="3">
-        <b-button size="sm" class="asc_yp-peopleList-header-button" variant="dark">
+        <b-button size="sm" class="asc_yp-peopleList-header-button" variant="dark" @click="submitForm()">
           save
         </b-button>
       </b-col>
@@ -35,60 +35,65 @@
               <b-form-input v-model="user.company" />
             </b-form-group>
           </li>
-          <li v-for="(phone, p) in user.phone" :key="`phone${p}`">
-            <b-row>
-              <b-col cols="10">
-                <b-form-group :label="$t('number')">
-                  <b-form-input v-model="phone.number" />
-                </b-form-group>
-              </b-col>
-              <b-col cols="2" class="pointer" @click="removeNumber()">
-                -
-              </b-col>
-            </b-row>
-          </li>
-          <li>
-            <AddNumber />
-          </li>
         </ul>
+      </b-col>
+      <b-col cols="12" class="mt-5 text-danger">
+        <span style="float: right; text-align: right" @click="removeItem()">
+          {{ $t('delete') }}
+        </span>
       </b-col>
     </b-row>
   </div>
 </template>
 <script>
-import AddNumber from '@/components/AddNumber.vue'
+import { mapState } from 'vuex'
 export default {
   name: 'UpdateItem',
-  components: {
-    AddNumber
-  },
   data: () => ({
     addNew: false,
     newNumber: null,
     user: {
-      id: 1,
-      name: 'Ahmet',
-      surname: 'Selim',
-      company: 'Canvas',
-      phone: [
-        { number: 1123123123 },
-        { number: 2342342345 },
-        { number: 4564564562 },
-        { number: 7686786786 }
-      ]
+      name: null,
+      surname: null,
+      company: null
     }
   }),
+  watch: {
+    infoStatus:function(val) {
+      if(val) {
+        this.editMode()
+        this.$store.dispatch('getContent', { ...this.data, api: 'people', show: this.$route.params.id})
+      }
+    },
+    itemInfoStatus:function(val) {
+      if(val) {
+        this.editMode()
+        this.$router.push("/People");
+      }
+    }
+  },
+  computed: {
+    ...mapState(['content', 'infoStatus', 'itemInfoStatus'])
+  },
+  mounted () {
+    this.user.name = this.content.name
+    this.user.surname = this.content.surname
+    this.user.company = this.content.company
+  },
   methods: {
     editMode () {
       this.$store.commit('setMode', false)
     },
-    searchThis () {
-      console.log(this.search)
+    submitForm () {
+      const formData = {
+        name: this.user.name,
+        surname: this.user.surname,
+        company: this.user.company
+      }
+      console.log(formData)
+      this.$store.dispatch('updateData', { ...this.data, api: 'people', show: this.$route.params.id, form: formData})
     },
-    addNumber () {
-
-    },
-    removeNumber () {
+    removeNumber (e) {
       this.$confirm(
         {
           message: `Are you sure?`,
@@ -98,7 +103,23 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-              console.log(confirm)
+              this.$store.dispatch('removeData', { ...this.data, api: 'phone', show: e})
+            }
+          }
+        }
+      )
+    },
+    removeItem () {
+      this.$confirm(
+        {
+          message: `Are you sure?`,
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+          callback: confirm => {
+            if (confirm) {
+              this.$store.dispatch('removeItem', { ...this.data, api: 'people', show: this.$route.params.id})
             }
           }
         }

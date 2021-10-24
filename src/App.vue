@@ -82,6 +82,12 @@ body {
             line-height: 30px
             border-bottom: 1px #202020 solid
             font-weight: 400
+            & span
+              width: 10vw
+              display: inline-block
+              color: #626262
+              font-size: 12px
+              line-height: 32px
             &:last-child
               border-bottom: none
             & a
@@ -92,6 +98,11 @@ body {
               &:hover
                 transition: .2s
                 background: #000
+              & span
+                float: right
+                color: #626262
+                font-size: 12px
+                line-height: 32px
   .asc_yp-confirm
     .vc-container
       background: #141414

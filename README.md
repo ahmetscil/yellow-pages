@@ -1,25 +1,17 @@
-# yellowpages
+# REHBER UYGULAMASI
+```bash
+# kurulum ve ilk kullanım
+$ npm install
+$ npm run serve
 
-## Project setup
-```
-npm install
-```
+# standart kullanım
+$ npm run serve
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# API URL
+http://localhost:8080
 
-### Compiles and minifies for production
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# yellowpages
+# KULLANIM NOTLARI
+* Symfony JWT sistemi tamamlanamadığı için Auth control disable edildi.
+* Oturum yönetimi tamamlanamadığı için state/index.js altında user.id, user.name ve user.email statik girildi.
+* * http://localhost:8080/Auth adresinden yeni kullanıcı ürettiğinizde oturum yenilenecektir.

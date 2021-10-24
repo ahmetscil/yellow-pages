@@ -8,7 +8,7 @@
       </b-col>
       <b-col cols="6">
         <h1 class="asc_yp-peopleList-header-h1">
-          {{ user.name + ' ' + user.surname }}
+          {{ content.name }}
         </h1>
       </b-col>
       <b-col cols="3">
@@ -21,26 +21,31 @@
       <b-col cols="12" class="asc_yp-peopleList-body-list">
         <ul>
           <li>
-            {{ user.name }}
+            <span>name</span>
+            {{ content.name }}
           </li>
           <li>
-            {{ user.surname }}
+            <span>surname</span>
+            {{ content.surname }}
           </li>
           <li>
-            {{ user.company }}
+            <span>company</span>
+            {{ content.company }}
           </li>
-          <li v-for="(phone, p) in user.phone" :key="`phone${p}`">
+          <li v-for="(phone, p) in content.phone" :key="`phone${p}`">
             <b-row>
               <b-col cols="10">
-                {{ phone.number }}
+                <a :href="`tel:${phone.number}`">
+                  {{ phone.number }}
+                </a>
               </b-col>
-              <b-col cols="2" class="pointer" @click="removeNumber()">
+              <b-col cols="2" class="pointer" @click="removeNumber(phone.id)">
                 -
               </b-col>
             </b-row>
           </li>
           <li>
-            <AddNumber />
+            <AddNumber :people="content.id" />
           </li>
         </ul>
       </b-col>
@@ -49,39 +54,30 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import AddNumber from '@/components/AddNumber.vue'
 export default {
   name: 'ShowItem',
   components: {
     AddNumber
   },
-  data: () => ({
-    addNew: false,
-    newNumber: null,
-    user: {
-      id: 1,
-      name: 'Ahmet',
-      surname: 'Selim',
-      company: 'Canvas',
-      phone: [
-        { number: 1123123123 },
-        { number: 2342342345 },
-        { number: 4564564562 },
-        { number: 7686786786 }
-      ]
-    }
-  }),
+   computed: {
+    ...mapState(['content'])
+  },
+  mounted () {
+    this.getData()
+  },
   methods: {
+    getData () {
+      this.$store.dispatch('getContent', { ...this.data, api: 'people', show: this.$route.params.id})
+    },
     searchThis () {
       console.log(this.search)
     },
     editMode () {
       this.$store.commit('setMode', true)
     },
-    addNumber () {
-
-    },
-    removeNumber () {
+    removeNumber (e) {
       this.$confirm(
         {
           message: `Are you sure?`,
@@ -91,7 +87,7 @@ export default {
           },
           callback: confirm => {
             if (confirm) {
-              console.log(confirm)
+              this.$store.dispatch('removeData', { ...this.data, api: 'phone', show: e})
             }
           }
         }

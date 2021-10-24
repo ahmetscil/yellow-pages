@@ -3,18 +3,25 @@
     <b-row class="asc_yp-peopleList-header">
       <b-col cols="3">
         <router-link :to="{ name: 'Home' }" class="asc_yp-peopleList-header-button btn btn-sm btn-dark">
-          cancel
+          {{ $t('cancel') }}
         </router-link>
       </b-col>
       <b-col cols="6">
         <h1 class="asc_yp-peopleList-header-h1">
-          New User
+          {{ $t('newUser') }}
         </h1>
       </b-col>
       <b-col cols="3">
         <b-button size="sm" class="asc_yp-peopleList-header-button" variant="dark" @click="saveForm()">
-          save
+          {{ $t('save') }}
         </b-button>
+      </b-col>
+    </b-row>
+    <b-row v-if="infoStatus">
+      <b-col>
+        <b-alert show>
+          {{ infoMessage }}
+        </b-alert>
       </b-col>
     </b-row>
     <b-row class="asc_yp-peopleList-body">
@@ -35,9 +42,6 @@
               <b-form-input v-model="user.company" />
             </b-form-group>
           </li>
-          <li v-for="(phone, p) in user.phone" :key="`phone${p}`">
-            {{ phone.number }}
-          </li>
           <li>
             <b-row>
               <b-col cols="10">
@@ -52,12 +56,16 @@
               </b-col>
             </b-row>
           </li>
+          <li v-for="(phone, p) in user.phone" :key="`phone${p}`">
+            {{ phone }}
+          </li>
         </ul>
       </b-col>
     </b-row>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { required, numeric } from 'vuelidate/lib/validators'
 export default {
   name: 'NewItem',
@@ -71,6 +79,9 @@ export default {
       phone: []
     }
   }),
+  computed: {
+    ...mapState(['infoStatus, infoMessage'])
+  },
   methods: {
     addNew () {
       this.$v.newNumber.$touch()
@@ -78,12 +89,12 @@ export default {
         alert('field error')
       } else {
         const newNum = this.newNumber
-        this.user.phone.push({ number: newNum })
+        this.user.phone.push(newNum)
         this.newNumber = null
       }
     },
     saveForm () {
-      console.log(this.user)
+      this.$store.dispatch('postData', { ...this.data, form: this.user, api: 'people'})
     }
   },
   validations: {

@@ -4,36 +4,31 @@ import Home from '../views/Home.vue'
 import store from "../store";
 
 Vue.use(VueRouter)
-
+const authMode = false
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/people',
-    name: 'People',
-    component: () => import(/* webpackChunkName: "people" */ '../views/People.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: authMode }
   },
   {
     path: '/:id/:name',
     name: 'Item',
     component: () => import(/* webpackChunkName: "item" */ '../views/Item.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: authMode }
   },
   {
     path: '/new',
     name: 'New',
     component: () => import(/* webpackChunkName: "new" */ '../views/New.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: authMode }
   },
   {
     path: '/auth',
     name: 'Auth',
-    component: () => import(/* webpackChunkName: "auth" */ '../views/Auth.vue')
+    component: () => import(/* webpackChunkName: "auth" */ '../views/Auth.vue'),
+    meta: { requiresAuth: false }
   }
 ]
 

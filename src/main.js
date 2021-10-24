@@ -1,3 +1,6 @@
+localStorage.setItem('userDataId', 1)
+localStorage.setItem('userDataName', "ahmet selim")
+localStorage.setItem('userDataEmail', "hi@ahmetsc.com")
 import Vue from 'vue'
 import App from './App.vue'
 import { BootstrapVue } from 'bootstrap-vue'
@@ -15,7 +18,9 @@ import store from './store'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
-axios.defaults.baseURL = 'htt://127.0.0.1:8022/';
+
+axios.defaults.baseURL = 'http://localhost:8080/'; // SYMFONY API URL
+
 Vue.use(VueAxios, axios)
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
